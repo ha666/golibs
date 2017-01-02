@@ -1,6 +1,9 @@
 package golibs
 
 import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
@@ -8,6 +11,7 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 )
 
 func Md5(s string) string {
@@ -36,4 +40,42 @@ func HmacSha512(message, secret []byte) []byte {
 	h := hmac.New(sha512.New, secret)
 	h.Write(message)
 	return h.Sum(nil)
+}
+
+func AesEncrypt(plaintext, key, iv []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, errors.New("invalid decrypt key")
+	}
+	blockSize := block.BlockSize()
+	plaintext = PKCS7Padding(plaintext, blockSize)
+	blockMode := cipher.NewCBCEncrypter(block, iv)
+	ciphertext := make([]byte, len(plaintext))
+	blockMode.CryptBlocks(ciphertext, plaintext)
+	return ciphertext, nil
+}
+
+func AesDecrypt(crypted, key, iv []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, iv)
+	origData := make([]byte, len(crypted))
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS7UnPadding(origData)
+	return origData, nil
+}
+
+func PKCS7Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS7UnPadding(origData []byte) []byte {
+	length := len(origData)
+	// 去掉最后一个字节 unpadding 次
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
 }
