@@ -13,10 +13,18 @@ func Since(t time.Time) int64 {
 	return time.Since(t).Nanoseconds() / 1000000
 }
 
+// 返回当前时间戳（纳秒）
 func UnixNano() int64 {
 	return time.Now().UnixNano()
 }
 
+// 返回当前时间戳（秒）
 func Unix() int64 {
 	return time.Now().Unix()
+}
+
+// 返回从2000-01-01 00:00:00到现在经过的纳秒数
+func From2000Nano() int64 {
+	timeA, _ := time.Parse(Time_TIMEStandard, "2000-01-01 00:00:00")
+	return time.Since(timeA).Nanoseconds()
 }
