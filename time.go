@@ -25,6 +25,7 @@ func Unix() int64 {
 
 // 返回从2000-01-01 00:00:00到现在经过的纳秒数
 func From2000Nano() int64 {
+	time.Sleep(time.Nanosecond)
 	timeA, _ := time.Parse(Time_TIMEStandard, "2000-01-01 00:00:00")
 	return time.Since(timeA).Nanoseconds()
 }
