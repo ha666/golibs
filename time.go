@@ -34,3 +34,8 @@ func From2000Nano() int64 {
 	timeA, _ := time.Parse(Time_TIMEStandard, "2000-01-01 00:00:00")
 	return time.Since(timeA).Nanoseconds()
 }
+
+// 把时间字符串转成本地时间
+func TimeStringToTime(sourceTime string) (time.Time, error) {
+	return time.ParseInLocation(Time_TIMEStandard, sourceTime, time.Local)
+}

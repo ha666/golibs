@@ -25,6 +25,19 @@ func GenerateSign(params map[string]string, secret string, taobaonick string, ti
 	return Md5(stringToBeSigned)
 }
 
+func GenerateSignNoUser(params map[string]string, secret string) string {
+	keys := make([]string, 0, len(params))
+	for key := range params {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	stringToBeSigned := secret
+	for _, k := range keys {
+		stringToBeSigned += k + params[k]
+	}
+	return Md5(stringToBeSigned)
+}
+
 func TopSign(params url.Values, secret string) string {
 	keys := make([]string, 0, len(params))
 	for key := range params {
