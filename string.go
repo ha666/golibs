@@ -2,6 +2,8 @@ package golibs
 
 import (
 	"crypto/rand"
+	"encoding/base64"
+	"io"
 	"math/big"
 	"regexp"
 	"strconv"
@@ -60,4 +62,12 @@ func HTMLEncode(rs string) string {
 		html += "&#" + strconv.Itoa(int(r)) + ";"
 	}
 	return html
+}
+
+func GetGuid() string {
+	b := make([]byte, 48)
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
+		return ""
+	}
+	return Md5(base64.URLEncoding.EncodeToString(b))
 }
