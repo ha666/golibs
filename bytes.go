@@ -27,3 +27,22 @@ func ZlibUnzipBytes(input []byte) ([]byte, error) {
 	data, _ := ioutil.ReadAll(r)
 	return data, nil
 }
+
+// 混淆[]byte
+func ConfusedTwo(sourceBytes []byte) []byte {
+	var confusedBytes []byte = make([]byte, len(sourceBytes))
+	idx := 0
+	for index := 0; index < len(sourceBytes); index++ {
+		if index%2 == 0 {
+			confusedBytes[idx] = byte(255 - sourceBytes[index])
+			idx++
+		}
+	}
+	for index := 0; index < len(sourceBytes); index++ {
+		if index%2 == 1 {
+			confusedBytes[idx] = byte(255 - sourceBytes[index])
+			idx++
+		}
+	}
+	return confusedBytes
+}
