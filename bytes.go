@@ -46,3 +46,33 @@ func ConfusedTwo(sourceBytes []byte) []byte {
 	}
 	return confusedBytes
 }
+
+// 反混淆[]byte
+func UnConfusedTwo(confusedBytes []byte) []byte {
+	loopCount := len(confusedBytes)
+	count := loopCount / 2
+	if loopCount%2 == 1 {
+		count = loopCount/2 + 1
+	}
+	beforeBytes := confusedBytes[0:count]
+	afterBytes := confusedBytes[count:]
+	var unConfusedBytes []byte = make([]byte, loopCount)
+	beforeIndex := 0
+	afterIndex := 0
+	for index := 0; index < loopCount; index++ {
+		if index%2 == 0 {
+			if beforeIndex >= len(beforeBytes) {
+				continue
+			}
+			unConfusedBytes[index] = 255 - beforeBytes[beforeIndex]
+			beforeIndex++
+		} else {
+			if afterIndex >= len(afterBytes) {
+				continue
+			}
+			unConfusedBytes[index] = 255 - afterBytes[afterIndex]
+			afterIndex++
+		}
+	}
+	return unConfusedBytes
+}
