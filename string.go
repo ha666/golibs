@@ -71,3 +71,10 @@ func GetGuid() string {
 	}
 	return Md5(base64.URLEncoding.EncodeToString(b))
 }
+
+func IsTaobaoNick(taobaoNick string) bool {
+	if len(taobaoNick) < 2 {
+		return false
+	}
+	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“]*$)`).MatchString(taobaoNick)
+}
