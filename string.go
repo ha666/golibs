@@ -2,7 +2,6 @@ package golibs
 
 import (
 	"crypto/rand"
-	"encoding/base64"
 	"io"
 	"math/big"
 	"regexp"
@@ -69,7 +68,7 @@ func GetGuid() string {
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		return ""
 	}
-	return Md5(base64.URLEncoding.EncodeToString(b))
+	return Md5(Base64(b))
 }
 
 func IsTaobaoNick(taobaoNick string) bool {
