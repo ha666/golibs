@@ -2,6 +2,7 @@ package golibs
 
 import (
 	"crypto/rand"
+	"errors"
 	"io"
 	"math/big"
 	"regexp"
@@ -69,6 +70,33 @@ func GetGuid() string {
 		return ""
 	}
 	return Md5(Base64(b))
+}
+
+func GetIPNums(ipAddress string) (ipNum uint32, err error) {
+	if strings.EqualFold(ipAddress, "") {
+		return ipNum, errors.New("ipAddress is null")
+	}
+	items := strings.Split(ipAddress, ".")
+	if len(items) != 4 {
+		return ipNum, errors.New("ipAddress is error")
+	}
+	item0, err := strconv.Atoi(items[0])
+	if err != nil {
+		return ipNum, errors.New("ipAddress is error0")
+	}
+	item1, err := strconv.Atoi(items[1])
+	if err != nil {
+		return ipNum, errors.New("ipAddress is error1")
+	}
+	item2, err := strconv.Atoi(items[2])
+	if err != nil {
+		return ipNum, errors.New("ipAddress is error2")
+	}
+	item3, err := strconv.Atoi(items[3])
+	if err != nil {
+		return ipNum, errors.New("ipAddress is error3")
+	}
+	return uint32(item0<<24 | item1<<16 | item2<<8 | item3), nil
 }
 
 func IsTaobaoNick(taobaoNick string) bool {
