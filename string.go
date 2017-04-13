@@ -24,12 +24,14 @@ func SubString(s string, pos, length int) string {
 	return string(runes[pos:l])
 }
 
+//获取文件扩展名
 func GetFileSuffix(s string) string {
 	re, _ := regexp.Compile(".(jpg|jpeg|png|gif|exe|doc|docx|ppt|pptx|xls|xlsx)")
 	suffix := re.ReplaceAllString(s, "")
 	return suffix
 }
 
+//生成指定范围内的int64数字
 func RandInt64(min, max int64) int64 {
 	maxBigInt := big.NewInt(max)
 	i, _ := rand.Int(rand.Reader, maxBigInt)
@@ -39,6 +41,7 @@ func RandInt64(min, max int64) int64 {
 	return i.Int64()
 }
 
+//删除空格、换行、空格等字符
 func Strim(str string) string {
 	str = strings.Replace(str, "\t", "", -1)
 	str = strings.Replace(str, " ", "", -1)
@@ -47,6 +50,7 @@ func Strim(str string) string {
 	return str
 }
 
+//字符串转成Unicode编码
 func String2Unicode(rs string) string {
 	json := ""
 	for _, r := range rs {
@@ -60,6 +64,20 @@ func String2Unicode(rs string) string {
 	return json
 }
 
+//Unicode编码转成字符串
+func Unicode2String(form string) (to string, err error) {
+	bs, err := hex.DecodeString(strings.Replace(form, `\u`, ``, -1))
+	if err != nil {
+		return
+	}
+	for i, bl, br, r := 0, len(bs), bytes.NewReader(bs), uint16(0); i < bl; i += 2 {
+		binary.Read(br, binary.BigEndian, &r)
+		to += string(r)
+	}
+	return
+}
+
+//html编码
 func HTMLEncode(rs string) string {
 	html := ""
 	for _, r := range rs {
@@ -68,6 +86,7 @@ func HTMLEncode(rs string) string {
 	return html
 }
 
+//获取一个Guid
 func GetGuid() string {
 	b := make([]byte, 48)
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
@@ -76,6 +95,7 @@ func GetGuid() string {
 	return Md5(Base64(b))
 }
 
+//把IP地址转成数字
 func GetIPNums(ipAddress string) (ipNum uint32, err error) {
 	if strings.EqualFold(ipAddress, "") {
 		return ipNum, errors.New("ipAddress is null")
@@ -103,6 +123,7 @@ func GetIPNums(ipAddress string) (ipNum uint32, err error) {
 	return uint32(item0<<24 | item1<<16 | item2<<8 | item3), nil
 }
 
+//判断是否是淘宝用户名
 func IsTaobaoNick(taobaoNick string) bool {
 	if len(taobaoNick) < 2 {
 		return false
@@ -112,6 +133,7 @@ func IsTaobaoNick(taobaoNick string) bool {
 
 const zipOffset int = 19968
 
+//压缩md5或guid
 func ZipMd5(md5String string) (zipString string, err error) {
 	md5Bytes := getHexBytes(md5String + "0")
 	var data bytes.Buffer
@@ -152,6 +174,7 @@ func ZipMd5(md5String string) (zipString string, err error) {
 	return
 }
 
+//解压缩汉字，结果为guid或md5值
 func UnZipMd5(zipString string) (md5String string, err error) {
 	var data bytes.Buffer
 	unicodeString := String2Unicode(zipString)
@@ -170,18 +193,6 @@ func UnZipMd5(zipString string) (md5String string, err error) {
 		data.WriteString(tenValue2Char((dec >> 8) & 15))
 	}
 	md5String = SubString(data.String(), 0, 32)
-	return
-}
-
-func Unicode2String(form string) (to string, err error) {
-	bs, err := hex.DecodeString(strings.Replace(form, `\u`, ``, -1))
-	if err != nil {
-		return
-	}
-	for i, bl, br, r := 0, len(bs), bytes.NewReader(bs), uint16(0); i < bl; i += 2 {
-		binary.Read(br, binary.BigEndian, &r)
-		to += string(r)
-	}
 	return
 }
 
