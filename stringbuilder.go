@@ -2,6 +2,7 @@ package golibs
 
 import (
 	"bytes"
+	"fmt"
 )
 
 type StringBuilder struct {
@@ -12,8 +13,8 @@ func NewStringBuilder() *StringBuilder {
 	return &StringBuilder{buf: bytes.Buffer{}}
 }
 
-func (this *StringBuilder) Append(obj string) *StringBuilder {
-	this.buf.WriteString(obj)
+func (this *StringBuilder) Append(obj interface{}) *StringBuilder {
+	this.buf.WriteString(fmt.Sprintf("%v", obj))
 	return this
 }
 
