@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"math/big"
+	"net"
 	"regexp"
 	"strconv"
 	"strings"
@@ -226,4 +227,28 @@ func tenValue2Char(ten int64) string {
 		return "F"
 	}
 	return ""
+}
+
+func GetCurrentIntranetIP() string {
+	ipaddress := ""
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		fmt.Println("获取当前内网IP出错：", err)
+		return ""
+	}
+	for _, address := range addrs {
+		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				if strings.HasPrefix(ipnet.IP.String(), "10.") || strings.HasPrefix(ipnet.IP.String(), "192.") {
+					ipaddress = ipnet.IP.String()
+					break
+				}
+			}
+		}
+	}
+	if len(ipaddress) < 9 {
+		fmt.Println("获取当前内网IP出错：没有找到IP")
+		return ""
+	}
+	return ipaddress
 }
