@@ -25,6 +25,10 @@ func Base64(src []byte) string {
 	return base64.StdEncoding.EncodeToString(src)
 }
 
+func UnBase64(source string) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(source)
+}
+
 func HmacSha1(message, secret []byte) []byte {
 	h := hmac.New(sha1.New, secret)
 	h.Write(message)

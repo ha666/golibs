@@ -25,6 +25,15 @@ func SubString(s string, pos, length int) string {
 	return string(runes[pos:l])
 }
 
+//字符串逆序
+func ReverseString(s string) string {
+	str := []rune(s)
+	for i, j := 0, len(str)-1; i < j; i, j = i+1, j-1 {
+		str[i], str[j] = str[j], str[i]
+	}
+	return string(str)
+}
+
 //获取文件扩展名
 func GetFileSuffix(s string) string {
 	re, _ := regexp.Compile(".(jpg|jpeg|png|gif|exe|doc|docx|ppt|pptx|xls|xlsx)")
@@ -130,6 +139,14 @@ func IsTaobaoNick(taobaoNick string) bool {
 		return false
 	}
 	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“]*$)`).MatchString(taobaoNick)
+}
+
+//判断是否是字母、数字
+func IsLetterOrNumber(name string) bool {
+	if len(name) < 1 {
+		return false
+	}
+	return regexp.MustCompile(`(^[A-Za-z0-9]*$)`).MatchString(name)
 }
 
 const zipOffset int = 19968
