@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 //字串截取
@@ -149,11 +150,32 @@ func IsLetterOrNumber(name string) bool {
 	return regexp.MustCompile(`(^[A-Za-z0-9]*$)`).MatchString(name)
 }
 
+/*
+判断字符串是否全中文字符
+*/
+func IsAllChineseChar(str string) bool {
+	for _, r := range str {
+		if !unicode.Is(unicode.Scripts["Han"], r) {
+			return false
+		}
+	}
+	return true
+}
+
 const zipOffset int = 19968
 
 //压缩md5或guid
 func ZipMd5(md5String string) (zipString string, err error) {
-	md5Bytes := getHexBytes(md5String + "0")
+	if len(md5String) != 16 && len(md5String) != 32 {
+		return "", errors.New("源md5值长度不对")
+	}
+	var md5Bytes []byte
+	switch len(md5String) {
+	case 16:
+		md5Bytes = getHexBytes(md5String + "00")
+	case 32:
+		md5Bytes = getHexBytes(md5String + "0")
+	}
 	var data bytes.Buffer
 	var total int = 0
 	for index := 0; index < len(md5Bytes); index++ {
@@ -194,6 +216,9 @@ func ZipMd5(md5String string) (zipString string, err error) {
 
 //解压缩汉字，结果为guid或md5值
 func UnZipMd5(zipString string) (md5String string, err error) {
+	if len(zipString) != 18 && len(zipString) != 33 {
+		return "", errors.New("源zip值长度不对")
+	}
 	var data bytes.Buffer
 	unicodeString := String2Unicode(zipString)
 	unicodeStrings := strings.Split(unicodeString, "\\u")
@@ -210,7 +235,12 @@ func UnZipMd5(zipString string) (md5String string, err error) {
 		data.WriteString(tenValue2Char((dec >> 4) & 15))
 		data.WriteString(tenValue2Char((dec >> 8) & 15))
 	}
-	md5String = SubString(data.String(), 0, 32)
+	switch len(zipString) {
+	case 18:
+		md5String = SubString(data.String(), 0, 16)
+	case 33:
+		md5String = SubString(data.String(), 0, 32)
+	}
 	return
 }
 
