@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -276,6 +277,7 @@ func tenValue2Char(ten int64) string {
 	return ""
 }
 
+//获取当前内网IP
 func GetCurrentIntranetIP() string {
 	ipaddress := ""
 	addrs, err := net.InterfaceAddrs()
@@ -298,4 +300,10 @@ func GetCurrentIntranetIP() string {
 		return ""
 	}
 	return ipaddress
+}
+
+//序列化为json
+func ToJson(data interface{}) string {
+	b, _ := json.Marshal(data)
+	return string(b)
 }
