@@ -4,8 +4,8 @@ import (
 	"hash/crc32"
 )
 
-func GetCRC32(str string) uint32 {
-	message := []byte(str)
+func GetCRC32(s string) uint32 {
+	message := []byte(s)
 	tbl := [256]uint32{0x00000000, 0x04C11DB7, 0x09823B6E, 0x0D4326D9,
 		0x130476DC, 0x17C56B6B, 0x1A864DB2, 0x1E475005,
 		0x2608EDB8, 0x22C9F00F, 0x2F8AD6D6, 0x2B4BCB61,
@@ -75,7 +75,6 @@ func GetCRC32(str string) uint32 {
 		crc = tbl[v^(byte(crc>>24)&0xff)] ^ (crc << 8)
 	}
 	crc = ^crc
-	// same as http://zorc.breitbandkatze.de/crc.html
 	chk := crc32.ChecksumIEEE(message)
 	return chk
 }

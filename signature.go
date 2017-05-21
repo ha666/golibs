@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func GenerateSign(params map[string]string, secret string, taobaonick string, time int64) string {
+func GenerateSign(params map[string]string, secret string, taobao_nick string, time int64) string {
 	keys := make([]string, 0, len(params))
 	for key := range params {
 		if 64 == key[0] {
@@ -16,13 +16,14 @@ func GenerateSign(params map[string]string, secret string, taobaonick string, ti
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	stringToBeSigned := secret
+	var string_to_signed *StringBuilder
+	string_to_signed.Append(secret)
 	for _, k := range keys {
-		stringToBeSigned += k + params[k]
+		string_to_signed.Append(k).Append(params[k])
 	}
-	stringToBeSigned += taobaonick
-	stringToBeSigned += fmt.Sprintf("%d", time)
-	return Md5(stringToBeSigned)
+	string_to_signed.Append(taobao_nick)
+	string_to_signed.Append(fmt.Sprintf("%d", time))
+	return Md5(string_to_signed.ToString())
 }
 
 func GenerateSignNoUser(params map[string]string, secret string) string {
@@ -31,11 +32,12 @@ func GenerateSignNoUser(params map[string]string, secret string) string {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	stringToBeSigned := secret
+	var string_to_signed *StringBuilder
+	string_to_signed.Append(secret)
 	for _, k := range keys {
-		stringToBeSigned += k + params[k]
+		string_to_signed.Append(k).Append(params[k])
 	}
-	return Md5(stringToBeSigned)
+	return Md5(string_to_signed.ToString())
 }
 
 func TopSign(params url.Values, secret string) string {
@@ -47,9 +49,10 @@ func TopSign(params url.Values, secret string) string {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	stringToBeSigned := secret
+	var string_to_signed *StringBuilder
+	string_to_signed.Append(secret)
 	for _, k := range keys {
-		stringToBeSigned += k + params[k][0]
+		string_to_signed.Append(k).Append(params[k][0])
 	}
-	return strings.ToUpper(Md5(stringToBeSigned))
+	return strings.ToUpper(Md5(string_to_signed.ToString()))
 }
