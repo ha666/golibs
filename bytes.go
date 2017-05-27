@@ -76,3 +76,12 @@ func UnConfusedTwo(confusedBytes []byte) []byte {
 	}
 	return unConfusedBytes
 }
+
+//反转[]byte
+func ReversalBytes(source []byte) []byte {
+	builder := make([]byte, len(source))
+	for i, v := range source {
+		builder[i] = 255 - v
+	}
+	return builder
+}
