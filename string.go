@@ -309,8 +309,14 @@ func ToJson(data interface{}) string {
 }
 
 //序列化-->混淆-->base64
-func ToConfusedBase64(obj interface{}) string {
+func ToJsonConfusedBase64(obj interface{}) string {
 	b, _ := json.Marshal(obj)
 	b = ConfusedTwo(b)
+	return Base64(b)
+}
+
+//混淆-->base64
+func ToConfusedBase64(str string) string {
+	b := ConfusedTwo([]byte(str))
 	return Base64(b)
 }
