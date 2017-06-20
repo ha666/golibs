@@ -151,6 +151,14 @@ func IsLetterOrNumber(s string) bool {
 	return regexp.MustCompile(`(^[A-Za-z0-9]*$)`).MatchString(s)
 }
 
+//判断是否由汉字、字母、数字、下划线组成
+func IsHanOrLetterOrNumber(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5]*$").MatchString(s)
+}
+
 /*
 判断字符串是否全中文字符
 */
