@@ -143,12 +143,12 @@ func IsTaobaoNick(s string) bool {
 	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“]*$)`).MatchString(s)
 }
 
-//判断是否是字母、数字
+//判断是否由字母、数字、下划线组成
 func IsLetterOrNumber(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[A-Za-z0-9]*$)`).MatchString(s)
+	return regexp.MustCompile(`(^[A-Za-z0-9_]*$)`).MatchString(s)
 }
 
 //判断是否由汉字、字母、数字、下划线组成
