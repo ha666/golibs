@@ -135,6 +135,18 @@ func GetIPNums(s string) (ipNum uint32, err error) {
 	return uint32(item0<<24 | item1<<16 | item2<<8 | item3), nil
 }
 
+//获取IP地址，不包含端口号
+func GetIPAddressNotPort(ip_address string) string {
+	if !strings.Contains(ip_address, ":") {
+		return ip_address
+	}
+	start := strings.Index(ip_address, ":")
+	if start <= 2 {
+		return ip_address
+	}
+	return SubString(ip_address, 0, start)
+}
+
 //判断是否是淘宝用户名
 func IsTaobaoNick(s string) bool {
 	if len(s) < 2 {
@@ -316,10 +328,25 @@ func ToJson(data interface{}) string {
 	return string(b)
 }
 
+//序列化-->zlib压缩-->混淆-->base64
+func ToJsonZipConfusedBase64(obj interface{}) string {
+	b, _ := json.Marshal(obj)
+	b, _ = ZlibZipBytes(b)
+	b = ConfusedTwo(b)
+	return Base64(b)
+}
+
 //序列化-->混淆-->base64
 func ToJsonConfusedBase64(obj interface{}) string {
 	b, _ := json.Marshal(obj)
 	b = ConfusedTwo(b)
+	return Base64(b)
+}
+
+//混淆-->zlib压缩-->base64
+func ToConfusedZipBase64(str string) string {
+	b := ConfusedTwo([]byte(str))
+	b, _ = ZlibZipBytes(b)
 	return Base64(b)
 }
 

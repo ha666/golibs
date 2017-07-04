@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/zlib"
 	"io/ioutil"
+	"strconv"
 )
 
 func ZlibZipBytes(input []byte) ([]byte, error) {
@@ -84,4 +85,15 @@ func ReversalBytes(source []byte) []byte {
 		builder[i] = 255 - v
 	}
 	return builder
+}
+
+//把十六进制字符串转成字节数组
+func HexStringToBytes(hex_str string) []byte {
+	len := len(hex_str) / 2
+	byte_array := make([]byte, len)
+	for index := 0; index < len; index++ {
+		ina, _ := strconv.ParseInt(SubString(hex_str, index*2, 2), 16, 32)
+		byte_array[index] = byte(ina)
+	}
+	return byte_array
 }
