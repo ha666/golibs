@@ -155,6 +155,22 @@ func IsTaobaoNick(s string) bool {
 	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“]*$)`).MatchString(s)
 }
 
+//判断是否是淘宝用户名（子帐号）
+func IsSubTaobaoNick(s string) bool {
+	if len(s) < 2 {
+		return false
+	}
+	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“:]*$)`).MatchString(s)
+}
+
+//判断是否版本号
+func IsVersion(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile(`(^[0-9.]*$)`).MatchString(s)
+}
+
 //判断是否由字母、数字、下划线组成
 func IsLetterOrNumber(s string) bool {
 	if len(s) < 1 {

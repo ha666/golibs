@@ -27,6 +27,11 @@ func Unix() int64 {
 	return time.Now().Unix()
 }
 
+// 返回当前时间戳（毫秒）
+func UnixMilliSecond() int64 {
+	return time.Now().UnixNano() / 1000000
+}
+
 // 返回当前时间字符串
 func StandardTime() string {
 	return time.Now().Format(Time_TIMEStandard)
