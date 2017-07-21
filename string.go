@@ -171,6 +171,14 @@ func IsVersion(s string) bool {
 	return regexp.MustCompile(`(^[0-9.]*$)`).MatchString(s)
 }
 
+//是否多数字(用逗号间隔)
+func IsMultipNumber(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile(`(^[0-9,]*$)`).MatchString(s)
+}
+
 //判断是否由字母、数字、下划线组成
 func IsLetterOrNumber(s string) bool {
 	if len(s) < 1 {
