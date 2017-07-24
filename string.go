@@ -10,10 +10,12 @@ import (
 	"fmt"
 	"io"
 	"math/big"
+	math_rand "math/rand"
 	"net"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 )
 
@@ -378,4 +380,18 @@ func ToConfusedZipBase64(str string) string {
 func ToConfusedBase64(str string) string {
 	b := ConfusedTwo([]byte(str))
 	return Base64(b)
+}
+
+//生成随机密码，短时间内会重复
+func GetPwd(lenth int) string {
+	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&*+-=?@^_~'"
+	runes := []rune(chars)
+	len1 := len(runes)
+	time.Sleep(time.Millisecond)
+	math_rand.Seed(time.Now().UnixNano())
+	pwd := NewStringBuilder()
+	for index := 0; index < lenth; index++ {
+		pwd.Append(string(runes[math_rand.Intn(len1)]))
+	}
+	return pwd.ToString()
 }
