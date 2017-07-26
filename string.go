@@ -173,6 +173,14 @@ func IsVersion(s string) bool {
 	return regexp.MustCompile(`(^[0-9.]*$)`).MatchString(s)
 }
 
+//判断是否网址
+func IsUrl(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile(`(^[a-zA-z]+://[^\s]*$)`).MatchString(s)
+}
+
 //是否多数字(用逗号间隔)
 func IsMultipNumber(s string) bool {
 	if len(s) < 1 {
