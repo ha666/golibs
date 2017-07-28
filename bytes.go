@@ -3,6 +3,7 @@ package golibs
 import (
 	"bytes"
 	"compress/zlib"
+	"encoding/binary"
 	"io/ioutil"
 	"strconv"
 )
@@ -96,4 +97,19 @@ func HexStringToBytes(hex_str string) []byte {
 		byte_array[index] = byte(ina)
 	}
 	return byte_array
+}
+
+//整形转换成字节
+func UIntToBytes(value uint32) []byte {
+	arr := []byte{0, 0, 0, 0}
+	arr[3] = byte((value >> 24) & 0xff)
+	arr[2] = byte((value >> 16) & 0xff)
+	arr[1] = byte((value >> 8) & 0xff)
+	arr[0] = byte(value & 0xff)
+	return arr
+}
+
+//字节转换成整形
+func BytesToUInt(b []byte) uint32 {
+	return binary.LittleEndian.Uint32(b)
 }
