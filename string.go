@@ -217,6 +217,17 @@ func IsAllChineseChar(s string) bool {
 	return true
 }
 
+//是否utf-8编码字符串
+func IsUtf8(s string) bool {
+	count := 0
+	for _, v := range s {
+		if int(v) > 65530 {
+			count++
+		}
+	}
+	return count == 0
+}
+
 const zip_offset int = 19968
 
 //压缩md5或guid
