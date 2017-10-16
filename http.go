@@ -1,6 +1,7 @@
 package golibs
 
 import (
+	"github.com/axgle/mahonia"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -18,7 +19,11 @@ func Get(requestUrl string) (int, string, error) {
 	if err != nil {
 		return 0, "", err
 	}
-	return response.StatusCode, string(body), nil
+	if strings.Contains(strings.ToLower(response.Header.Get("Content-Type")), "gb") {
+		return response.StatusCode, mahonia.NewDecoder("GB18030").ConvertString(string(body)), nil
+	} else {
+		return response.StatusCode, string(body), nil
+	}
 }
 
 //获取url和参数列表对应的完整请求url
@@ -64,7 +69,11 @@ func Post(requestUrl string, params url.Values) (int, string, error) {
 	if err != nil {
 		return 1003, "", err
 	}
-	return response.StatusCode, string(body), nil
+	if strings.Contains(strings.ToLower(response.Header.Get("Content-Type")), "gb") {
+		return response.StatusCode, mahonia.NewDecoder("GB18030").ConvertString(string(body)), nil
+	} else {
+		return response.StatusCode, string(body), nil
+	}
 }
 
 //获取当前连接的Http方法
