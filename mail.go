@@ -1,14 +1,18 @@
 package golibs
 
 import (
-	"net/smtp"
-	"strings"
+	"gopkg.in/gomail.v2"
 )
 
-func SendToMail(user, password, host, to, subject, body, mailtype string) error {
-	auth := smtp.PlainAuth("", user, password, strings.Split(host, ":")[0])
-	msg := []byte("To: " + to + "\r\nFrom: " + user + "\r\nSubject: " + subject + "\r\n" + "Content-Type: text/" + mailtype + "; charset=UTF-8" + "\r\n\r\n" + body)
-	sendto := strings.Split(to, ";")
-	err := smtp.SendMail(host, auth, user, sendto, msg)
-	return err
+func SendToMail(user,display_name, password, host, to, subject, body, mailtype string,port int) error {
+	m := gomail.NewMessage()
+	m.SetAddressHeader("From", user, display_name)
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/"+mailtype, body)
+	d := gomail.NewDialer(host, port, user, password)
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+	return nil
 }
