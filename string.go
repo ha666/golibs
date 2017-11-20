@@ -373,6 +373,20 @@ func ToJson(data interface{}) string {
 	return string(b)
 }
 
+//格式化为Json字符串
+func FormatJson(data interface{}) (js string, err error) {
+	b, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
+	var out bytes.Buffer
+	err = json.Indent(&out, b, "", "\t")
+	if err != nil {
+		return "", err
+	}
+	return out.String(), nil
+}
+
 //序列化-->zlib压缩-->混淆-->base64
 func ToJsonZipConfusedBase64(obj interface{}) string {
 	b, _ := json.Marshal(obj)
