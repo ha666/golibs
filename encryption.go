@@ -35,6 +35,12 @@ func Sha1(message []byte) []byte {
 	return h.Sum(nil)
 }
 
+func HmacMd5(message, secret []byte) []byte {
+	h := hmac.New(md5.New, secret)
+	h.Write(message)
+	return h.Sum(nil)
+}
+
 func HmacSha1(message, secret []byte) []byte {
 	h := hmac.New(sha1.New, secret)
 	h.Write(message)

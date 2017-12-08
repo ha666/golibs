@@ -4,7 +4,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-func SendToMail(user,display_name, password, host, to, subject, body, mailtype string,port int) error {
+func SendToMail(user, display_name, password, host, to, subject, body, mailtype string, port int) error {
 	m := gomail.NewMessage()
 	m.SetAddressHeader("From", user, display_name)
 	m.SetHeader("To", to)
