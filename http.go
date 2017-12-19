@@ -1,6 +1,7 @@
 package golibs
 
 import (
+	"bytes"
 	"github.com/axgle/mahonia"
 	"io/ioutil"
 	"net/http"
@@ -60,6 +61,31 @@ func Post(requestUrl string, params url.Values) (int, string, error) {
 	}
 	reqest.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
 	reqest.Header.Set("User-Agent", "Top4Net")
+	response, err := client.Do(reqest)
+	if err != nil {
+		return 1002, "", err
+	}
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return 1003, "", err
+	}
+	if strings.Contains(strings.ToLower(response.Header.Get("Content-Type")), "gb") {
+		return response.StatusCode, mahonia.NewDecoder("GB18030").ConvertString(string(body)), nil
+	} else {
+		return response.StatusCode, string(body), nil
+	}
+}
+
+//用Post方法获取url对应的内容，提交json，返回信息：StatusCode，body，err
+func PostJson(requestUrl string, params map[string]string) (int, string, error) {
+	client := &http.Client{}
+	req := bytes.NewBuffer([]byte(ToJson(params)))
+	reqest, err := http.NewRequest("POST", requestUrl, req)
+	if err != nil {
+		return 1001, "", err
+	}
+	reqest.Header.Set("Content-Type", "application/json")
 	response, err := client.Do(reqest)
 	if err != nil {
 		return 1002, "", err
