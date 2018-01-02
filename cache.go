@@ -62,3 +62,12 @@ func CacheGetByteArray(key string) (value []byte, ok bool) {
 func CacheDel(key string) {
 	_cache.Delete(key)
 }
+
+func CacheCount() int {
+	count := 0
+	_cache.Range(func(k, v interface{}) bool {
+		count++
+		return true
+	})
+	return count
+}
