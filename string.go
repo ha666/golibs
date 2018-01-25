@@ -205,6 +205,14 @@ func IsHanOrLetterOrNumber(s string) bool {
 	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5]*$").MatchString(s)
 }
 
+//是否email
+func IsEmail(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$").MatchString(s)
+}
+
 /*
 判断字符串是否全中文字符
 */
