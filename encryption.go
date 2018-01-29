@@ -13,12 +13,22 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
+	"net/url"
+	"strings"
 )
 
 func Md5(s string) string {
 	h := md5.New()
 	h.Write([]byte(s))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func UrlEncode(source string) string {
+	return strings.ToLower(url.QueryEscape(source))
+}
+
+func UrlDecode(source string) (string, error) {
+	return url.QueryUnescape(source)
 }
 
 func Base64(src []byte) string {
