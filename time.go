@@ -5,6 +5,7 @@ import "time"
 const (
 	Time_TIMEyyyyMMdd           string = "20060102"
 	Time_TIMEStandard           string = "2006-01-02 15:04:05"
+	Time_TIME_HH_mm_ss          string = "15:04:05"
 	Time_TIMEMSSQL              string = "2006-01-02T15:04:05.999Z"
 	Time_TIMEMYSQL              string = "2006-01-02T15:04:05+08:00"
 	Time_TIMEyyyyMMddHHmmss     string = "20060102150405"
