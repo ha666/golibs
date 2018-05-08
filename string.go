@@ -221,6 +221,14 @@ func IsEmail(s string) bool {
 	return regexp.MustCompile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$").MatchString(s)
 }
 
+//是否手机号
+func IsMobile(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile("^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$").MatchString(s)
+}
+
 /*
 判断字符串是否全中文字符
 */
