@@ -18,6 +18,15 @@ func Since(t time.Time) int64 {
 	return time.Since(t).Nanoseconds() / 1000000
 }
 
+// 延时delay毫秒，从t开始计时
+func Sleep(t time.Time, delay int64) {
+	end := Since(t)
+	end = delay - end
+	if end > 0 {
+		time.Sleep(time.Duration(end) * time.Millisecond)
+	}
+}
+
 // 返回当前时间戳（纳秒）
 func UnixNano() int64 {
 	return time.Now().UnixNano()
