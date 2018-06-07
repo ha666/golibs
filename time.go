@@ -20,9 +20,7 @@ func Since(t time.Time) int64 {
 
 // 延时delay毫秒，从t开始计时
 func Sleep(t time.Time, delay int64) {
-	end := Since(t)
-	end = delay - end
-	if end > 0 {
+	if end := delay - Since(t); end > 0 {
 		time.Sleep(time.Duration(end) * time.Millisecond)
 	}
 }
