@@ -56,3 +56,19 @@ func TopSign(params url.Values, secret string) string {
 	}
 	return strings.ToUpper(Md5(string_to_signed.ToString()))
 }
+
+func ApiSign(params url.Values, secret string) string {
+	keys := make([]string, 0, len(params))
+	sort.Strings(keys)
+	nsb := NewStringBuilder()
+	for _, k := range keys {
+		if strings.EqualFold(k, "") {
+			continue
+		}
+		if strings.EqualFold(k,"sign"){
+			continue
+		}
+		nsb.Append(k).Append(params[k])
+	}
+	return fmt.Sprintf("%x", HmacSha256([]byte(nsb.ToString()), []byte(secret)))
+}
