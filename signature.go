@@ -62,10 +62,10 @@ func ApiSign(params url.Values, secret string) string {
 	sort.Strings(keys)
 	nsb := NewStringBuilder()
 	for _, k := range keys {
-		if strings.EqualFold(k, "") {
+		if k == "" {
 			continue
 		}
-		if strings.EqualFold(k,"sign"){
+		if k == "sign" {
 			continue
 		}
 		nsb.Append(k).Append(params[k])
