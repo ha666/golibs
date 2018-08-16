@@ -3,9 +3,12 @@ package golibs
 import (
 	"bytes"
 	"github.com/axgle/mahonia"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -99,6 +102,56 @@ func PostJson(requestUrl string, params map[string]string) (int, string, error) 
 		return response.StatusCode, mahonia.NewDecoder("GB18030").ConvertString(string(body)), nil
 	} else {
 		return response.StatusCode, string(body), nil
+	}
+}
+
+//获取url对应的内容,同时上传文件，返回信息：StatusCode，body，err
+func PostFile(requestUrl string, params url.Values, field_name, path string) (int, string, error) {
+	bodyBuf := &bytes.Buffer{}
+	bodyWriter := multipart.NewWriter(bodyBuf)
+
+	//关键的一步操作
+	fileWriter, err := bodyWriter.CreateFormFile(field_name, path)
+	if err != nil {
+		return 1001, "", err
+	}
+
+	//打开文件句柄操作
+	fh, err := os.Open(path)
+	if err != nil {
+		return 1003, "", err
+	}
+	defer fh.Close()
+
+	//iocopy
+	_, err = io.Copy(fileWriter, fh)
+	if err != nil {
+		return 1005, "", err
+	}
+
+	//写入表单数据
+	if len(params) > 0 {
+		for k, v := range params {
+			bodyWriter.WriteField(k, v[0])
+		}
+	}
+
+	contentType := bodyWriter.FormDataContentType()
+	bodyWriter.Close()
+
+	resp, err := http.Post(requestUrl, contentType, bodyBuf)
+	if err != nil {
+		return 1007, "", err
+	}
+	defer resp.Body.Close()
+	resp_body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return 1009, "", err
+	}
+	if strings.Contains(strings.ToLower(resp.Header.Get("Content-Type")), "gb") {
+		return resp.StatusCode, mahonia.NewDecoder("GB18030").ConvertString(string(resp_body)), nil
+	} else {
+		return resp.StatusCode, string(resp_body), nil
 	}
 }
 
