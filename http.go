@@ -103,7 +103,7 @@ func PostBody(requestUrl string, reqBody string) (int, string, error) {
 	reqest.Header.Set("Content-Type", "application/json")
 	response, err := client.Do(reqest)
 	if err != nil {
-		return response.StatusCode, "", err
+		return 0, "", err
 	}
 	defer response.Body.Close()
 	body, err := ioutil.ReadAll(response.Body)
