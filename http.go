@@ -61,7 +61,7 @@ func Post(requestUrl string, params url.Values) (int, string, error) {
 	reqest.Header.Set("User-Agent", "ha666")
 	response, err := client.Do(reqest)
 	if err != nil {
-		return response.StatusCode, "", err
+		return 0, "", err
 	}
 	defer response.Body.Close()
 	body, err := ioutil.ReadAll(response.Body)
@@ -82,7 +82,7 @@ func PostJson(requestUrl string, params map[string]string) (int, string, error) 
 	reqest.Header.Set("Content-Type", "application/json")
 	response, err := client.Do(reqest)
 	if err != nil {
-		return response.StatusCode, "", err
+		return 0, "", err
 	}
 	defer response.Body.Close()
 	body, err := ioutil.ReadAll(response.Body)
@@ -149,7 +149,7 @@ func PostFile(requestUrl string, params url.Values, field_name, path string) (in
 
 	resp, err := http.Post(requestUrl, contentType, bodyBuf)
 	if err != nil {
-		return resp.StatusCode, "", err
+		return 0, "", err
 	}
 	defer resp.Body.Close()
 	resp_body, err := ioutil.ReadAll(resp.Body)
