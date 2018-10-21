@@ -221,6 +221,15 @@ func IsHanOrLetterOrNumber(s string) bool {
 	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5]*$").MatchString(s)
 }
 
+// 是否IPv4地址
+func IsIPAddress(ip string) bool {
+	matched, err := regexp.MatchString("(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)", ip)
+	if err != nil {
+		return false
+	}
+	return matched
+}
+
 //是否email
 func IsEmail(s string) bool {
 	if len(s) < 1 {
