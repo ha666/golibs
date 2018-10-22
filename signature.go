@@ -78,3 +78,23 @@ func ApiSignIsValid(params url.Values, secret string) bool {
 	}
 	return sign == fmt.Sprintf("%x", HmacMd5([]byte(data.ToString()), []byte(secret)))
 }
+
+// api签名，用于开放平台
+func ApiSign(params url.Values, secret string) string {
+	keys := make([]string, 0, len(params))
+	for key := range params {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	data := NewStringBuilder()
+	for _, k := range keys {
+		if strings.EqualFold(k, "") || strings.EqualFold(params[k][0], "") {
+			continue
+		}
+		if strings.EqualFold(k, "sign") {
+			continue
+		}
+		data.Append(k).Append(params[k][0])
+	}
+	return fmt.Sprintf("%x", HmacMd5([]byte(data.ToString()), []byte(secret)))
+}

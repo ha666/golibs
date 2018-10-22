@@ -230,6 +230,15 @@ func IsIPAddress(ip string) bool {
 	return matched
 }
 
+// 是否内网IP地址
+func IsIntranetIP(s string) bool {
+	matched, err := regexp.MatchString(`^((192\.168|172\.([1][6-9]|[2]\d|3[01]))(\.([2][0-4]\d|[2][5][0-5]|[01]?\d?\d)){2}|10(\.([2][0-4]\d|[2][5][0-5]|[01]?\d?\d)){3})$`, s)
+	if err != nil {
+		return false
+	}
+	return matched
+}
+
 //是否email
 func IsEmail(s string) bool {
 	if len(s) < 1 {
