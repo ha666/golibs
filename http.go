@@ -93,6 +93,28 @@ func PostJson(requestUrl string, params map[string]string) (int, string, error) 
 	return response.StatusCode, string(body), nil
 }
 
+// 带上Bearer Token，发起一个post请求，内容是json
+func PostJsonByToken(requestUrl, token, jsonString string) (int, string, error) {
+	client := &http.Client{}
+	req := bytes.NewBuffer([]byte(jsonString))
+	reqest, err := http.NewRequest("POST", requestUrl, req)
+	if err != nil {
+		return 0, "", err
+	}
+	reqest.Header.Set("Authorization", "Bearer "+token)
+	reqest.Header.Set("Content-Type", "application/json")
+	response, err := client.Do(reqest)
+	if err != nil {
+		return 0, "", err
+	}
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return response.StatusCode, "", err
+	}
+	return response.StatusCode, string(body), nil
+}
+
 //用Post方法获取url对应的内容，提交body，返回信息：StatusCode，body，err
 func PostBody(requestUrl string, reqBody string) (int, string, error) {
 	client := &http.Client{}
