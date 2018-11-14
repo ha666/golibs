@@ -10,11 +10,31 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
+
+var client *http.Client
+
+func init() {
+	client = &http.Client{
+		Timeout: 30 * time.Second,
+		Transport: &http.Transport{
+			IdleConnTimeout: time.Duration(3) * time.Minute,
+			MaxConnsPerHost: 10000,
+		},
+	}
+}
 
 //获取url对应的内容，返回信息：StatusCode，body，err
 func Get(requestUrl string) (int, string, error) {
-	response, err := http.Get(requestUrl)
+	reqest, err := http.NewRequest("GET", requestUrl, nil)
+	if err != nil {
+		return 0, "", err
+	}
+	response, err := client.Do(reqest)
+	if err != nil {
+		return 0, "", err
+	}
 	defer response.Body.Close()
 	if err != nil {
 		return 0, "", err
@@ -28,7 +48,6 @@ func Get(requestUrl string) (int, string, error) {
 
 // 带上Bearer Token，发起一个get请求
 func GetByToken(requestUrl, token string) (int, string, error) {
-	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", requestUrl, nil)
 	if err != nil {
 		return 0, "", err
@@ -76,7 +95,6 @@ func BuildRequestUrl(requestUrl string, params url.Values) string {
 
 //获取url对应的内容，返回信息：StatusCode，body，err
 func Post(requestUrl string, params url.Values) (int, string, error) {
-	client := &http.Client{}
 	reqest, err := http.NewRequest("POST", requestUrl, strings.NewReader(params.Encode()))
 	if err != nil {
 		return 0, "", err
@@ -97,7 +115,6 @@ func Post(requestUrl string, params url.Values) (int, string, error) {
 
 //用Post方法获取url对应的内容，提交json，返回信息：StatusCode，body，err
 func PostJson(requestUrl string, params map[string]string) (int, string, error) {
-	client := &http.Client{}
 	req := bytes.NewBuffer([]byte(ToJson(params)))
 	reqest, err := http.NewRequest("POST", requestUrl, req)
 	if err != nil {
@@ -118,7 +135,6 @@ func PostJson(requestUrl string, params map[string]string) (int, string, error) 
 
 // 带上Bearer Token，发起一个post请求，内容是json
 func PostJsonByToken(requestUrl, token, jsonString string) (int, string, error) {
-	client := &http.Client{}
 	req := bytes.NewBuffer([]byte(jsonString))
 	reqest, err := http.NewRequest("POST", requestUrl, req)
 	if err != nil {
@@ -140,7 +156,6 @@ func PostJsonByToken(requestUrl, token, jsonString string) (int, string, error) 
 
 //用Post方法获取url对应的内容，提交body，返回信息：StatusCode，body，err
 func PostBody(requestUrl string, reqBody string) (int, string, error) {
-	client := &http.Client{}
 	req := bytes.NewBuffer([]byte(reqBody))
 	reqest, err := http.NewRequest("POST", requestUrl, req)
 	if err != nil {
