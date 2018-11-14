@@ -26,6 +26,29 @@ func Get(requestUrl string) (int, string, error) {
 	return response.StatusCode, string(body), nil
 }
 
+// 带上Bearer Token，发起一个get请求
+func GetByToken(requestUrl, token string) (int, string, error) {
+	client := &http.Client{}
+	reqest, err := http.NewRequest("GET", requestUrl, nil)
+	if err != nil {
+		return 0, "", err
+	}
+	reqest.Header.Set("Authorization", "Bearer "+token)
+	response, err := client.Do(reqest)
+	if err != nil {
+		return 0, "", err
+	}
+	defer response.Body.Close()
+	if err != nil {
+		return 0, "", err
+	}
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return response.StatusCode, "", err
+	}
+	return response.StatusCode, string(body), nil
+}
+
 //获取url和参数列表对应的完整请求url
 func BuildRequestUrl(requestUrl string, params url.Values) string {
 	if len(params) <= 0 {

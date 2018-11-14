@@ -17,7 +17,13 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 )
+
+//使用 utf8.RuneCountInString()统计字符串长度
+func Length(str string) int {
+	return utf8.RuneCountInString(str)
+}
 
 //字串截取
 func SubString(s string, pos, length int) string {
