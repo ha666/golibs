@@ -227,6 +227,14 @@ func IsHanOrLetterOrNumber(s string) bool {
 	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5]*$").MatchString(s)
 }
 
+//判断是否由汉字、字母、数字、下划线、中杠等组成
+func IsGeneralString(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile("^[A-Za-z0-9_-\u4e00-\u9fa5]*$").MatchString(s)
+}
+
 // 是否IPv4地址
 func IsIPAddress(ip string) bool {
 	matched, err := regexp.MatchString("(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)", ip)
