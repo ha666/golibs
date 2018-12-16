@@ -235,6 +235,14 @@ func IsGeneralString(s string) bool {
 	return regexp.MustCompile("^[A-Za-z0-9_-\u4e00-\u9fa5]*$").MatchString(s)
 }
 
+//判断是否标准时间格式
+func IsStandardTime(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return regexp.MustCompile(`^\d{4}\-\d{2}\-\d{2}\s+\d{2}:\d{2}:\d{2}$`).MatchString(s)
+}
+
 // 是否IPv4地址
 func IsIPAddress(ip string) bool {
 	matched, err := regexp.MatchString("(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)", ip)
