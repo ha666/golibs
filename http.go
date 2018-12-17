@@ -20,9 +20,9 @@ func init() {
 	client = &http.Client{
 		Timeout: 30 * time.Second,
 		Transport: &http.Transport{
-			IdleConnTimeout: 3 * time.Minute,
-			MaxConnsPerHost: 10000,
-			TLSHandshakeTimeout:   10 * time.Second,
+			IdleConnTimeout:     3 * time.Minute,
+			MaxConnsPerHost:     10000,
+			TLSHandshakeTimeout: 10 * time.Second,
 			DialContext: (&net.Dialer{
 				Timeout:   30 * time.Second,
 				KeepAlive: 10 * time.Minute,
