@@ -232,7 +232,7 @@ func IsGeneralString(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile("^[A-Za-z0-9_\\-\u4e00-\u9fa5]*$").MatchString(s)
+	return regexp.MustCompile("^[A-Za-z0-9_\\-#+./:\u4e00-\u9fa5]*$").MatchString(s)
 }
 
 //判断是否标准时间格式
