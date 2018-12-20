@@ -1,6 +1,9 @@
 package golibs
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 const (
 	Time_TIMEyyyyMMdd           string = "20060102"
@@ -48,6 +51,13 @@ func UnixMilliSecond() int64 {
 // 返回当前时间字符串
 func StandardTime() string {
 	return time.Now().Format(Time_TIMEStandard)
+}
+
+// 获取当前时间的int64格式，yyyyMMddHHmmss
+func GetTimeInt64() int64 {
+	s := time.Now().Format(Time_TIMEyyyyMMddHHmmss)
+	i64, _ := strconv.ParseInt(s, 10, 64)
+	return i64
 }
 
 // 返回从2000-01-01 00:00:00到现在经过的纳秒数
