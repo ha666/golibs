@@ -224,7 +224,7 @@ func IsHanOrLetterOrNumber(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5]*$").MatchString(s)
+	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5-]*$").MatchString(s)
 }
 
 //判断是否由汉字、字母、数字、下划线、中杠等组成
@@ -383,7 +383,7 @@ func UnZipMd5(zip_string string) (md5_string string, err error) {
 }
 
 func getHexBytes(str string) []byte {
-	result := []byte(str)
+	result := StringToSliceByte(str)
 	for index := 0; index < len(result); index++ {
 		if result[index] < 58 {
 			result[index] -= 48
@@ -476,14 +476,14 @@ func ToJsonConfusedBase64(obj interface{}) string {
 
 //混淆-->zlib压缩-->base64
 func ToConfusedZipBase64(str string) string {
-	b := ConfusedTwo([]byte(str))
+	b := ConfusedTwo(StringToSliceByte(str))
 	b, _ = ZlibZipBytes(b)
 	return Base64(b)
 }
 
 //混淆-->base64
 func ToConfusedBase64(str string) string {
-	b := ConfusedTwo([]byte(str))
+	b := ConfusedTwo(StringToSliceByte(str))
 	return Base64(b)
 }
 

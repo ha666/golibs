@@ -49,7 +49,7 @@ func Get(requestUrl string) (int, string, error) {
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 // 带上Bearer Token，发起一个get请求
@@ -71,7 +71,29 @@ func GetByToken(requestUrl, token string) (int, string, error) {
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
+}
+
+// 带上AuthToken，发起一个get请求
+func GetByAuthToken(requestUrl, authToken string) (int, string, error) {
+	reqest, err := http.NewRequest("GET", requestUrl, nil)
+	if err != nil {
+		return 0, "", err
+	}
+	reqest.Header.Set("auth-token", authToken)
+	response, err := client.Do(reqest)
+	if err != nil {
+		return 0, "", err
+	}
+	defer response.Body.Close()
+	if err != nil {
+		return 0, "", err
+	}
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return response.StatusCode, "", err
+	}
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 //获取url和参数列表对应的完整请求url
@@ -106,7 +128,7 @@ func Post(requestUrl string, params url.Values) (int, string, error) {
 		return 0, "", err
 	}
 	reqest.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-	reqest.Header.Set("User-Agent", "ha666")
+	reqest.Header.Set("User-Agent", "golang")
 	response, err := client.Do(reqest)
 	if err != nil {
 		return 0, "", err
@@ -116,12 +138,33 @@ func Post(requestUrl string, params url.Values) (int, string, error) {
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
+}
+
+//获取url对应的内容，返回信息：StatusCode，body，err
+func PostByAuthToken(requestUrl string, authToken string, params url.Values) (int, string, error) {
+	reqest, err := http.NewRequest("POST", requestUrl, strings.NewReader(params.Encode()))
+	if err != nil {
+		return 0, "", err
+	}
+	reqest.Header.Set("auth-token", authToken)
+	reqest.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+	reqest.Header.Set("User-Agent", "golang")
+	response, err := client.Do(reqest)
+	if err != nil {
+		return 0, "", err
+	}
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return response.StatusCode, "", err
+	}
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 //用Post方法获取url对应的内容，提交json，返回信息：StatusCode，body，err
 func PostJson(requestUrl string, params map[string]string) (int, string, error) {
-	req := bytes.NewBuffer([]byte(ToJson(params)))
+	req := bytes.NewBuffer(StringToSliceByte(ToJson(params)))
 	reqest, err := http.NewRequest("POST", requestUrl, req)
 	if err != nil {
 		return 0, "", err
@@ -136,7 +179,7 @@ func PostJson(requestUrl string, params map[string]string) (int, string, error) 
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 // 带上Bearer Token，发起一个post请求，无内容
@@ -156,12 +199,12 @@ func PostByToken(requestUrl, token string) (int, string, error) {
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 // 带上Bearer Token，发起一个post请求，内容是json
 func PostJsonByToken(requestUrl, token, jsonString string) (int, string, error) {
-	req := bytes.NewBuffer([]byte(jsonString))
+	req := bytes.NewBuffer(StringToSliceByte(jsonString))
 	reqest, err := http.NewRequest("POST", requestUrl, req)
 	if err != nil {
 		return 0, "", err
@@ -177,12 +220,12 @@ func PostJsonByToken(requestUrl, token, jsonString string) (int, string, error) 
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 //用Post方法获取url对应的内容，提交body，返回信息：StatusCode，body，err
 func PostBody(requestUrl string, reqBody string) (int, string, error) {
-	req := bytes.NewBuffer([]byte(reqBody))
+	req := bytes.NewBuffer(StringToSliceByte(reqBody))
 	reqest, err := http.NewRequest("POST", requestUrl, req)
 	if err != nil {
 		return 0, "", err
@@ -197,7 +240,7 @@ func PostBody(requestUrl string, reqBody string) (int, string, error) {
 	if err != nil {
 		return response.StatusCode, "", err
 	}
-	return response.StatusCode, string(body), nil
+	return response.StatusCode, SliceByteToString(body), nil
 }
 
 //获取url对应的内容,同时上传文件，返回信息：StatusCode，body，err
@@ -243,7 +286,7 @@ func PostFile(requestUrl string, params url.Values, field_name, path string) (in
 	if err != nil {
 		return resp.StatusCode, "", err
 	}
-	return resp.StatusCode, string(resp_body), nil
+	return resp.StatusCode, SliceByteToString(resp_body), nil
 }
 
 //获取当前连接的Http方法

@@ -11,6 +11,7 @@ package gconv
 
 import (
 	"fmt"
+	"gitee.com/ha666/golibs"
 	"strconv"
 )
 
@@ -21,7 +22,7 @@ func Bytes(i interface{}) []byte {
 	if r, ok := i.([]byte); ok {
 		return r
 	} else {
-		return []byte(String(i))
+		return golibs.StringToSliceByte(String(i))
 	}
 }
 

@@ -42,7 +42,7 @@ var decodeBase58Map [256]byte
 type JSONSyntaxError struct{ original []byte }
 
 func (j JSONSyntaxError) Error() string {
-	return fmt.Sprintf("invalid snowflake ID %q", string(j.original))
+	return fmt.Sprintf("invalid snowflake ID %q", SliceByteToString(j.original))
 }
 
 // Create a map for decoding Base58.  This speeds up the process tremendously.
@@ -240,7 +240,7 @@ func (f ID) Base64() string {
 
 // Bytes returns a byte slice of the snowflake ID
 func (f ID) Bytes() []byte {
-	return []byte(f.String())
+	return StringToSliceByte(f.String())
 }
 
 // IntBytes returns an array of bytes of the snowflake ID, encoded as a

@@ -8,6 +8,7 @@
 package gregx
 
 import (
+	"gitee.com/ha666/golibs"
 	"regexp"
 )
 
@@ -21,7 +22,7 @@ func IsMatch(pattern string, src []byte) bool {
 }
 
 func IsMatchString(pattern string, src string) bool {
-	return IsMatch(pattern, []byte(src))
+	return IsMatch(pattern, golibs.StringToSliceByte(src))
 }
 
 // 正则匹配，并返回匹配的列表
@@ -54,6 +55,6 @@ func Replace(pattern string, src, replace []byte) ([]byte, error) {
 
 // 正则替换(全部替换)，字符串
 func ReplaceString(pattern, src, replace string) (string, error) {
-	r, e := Replace(pattern, []byte(src), []byte(replace))
-	return string(r), e
+	r, e := Replace(pattern, golibs.StringToSliceByte(src), golibs.StringToSliceByte(replace))
+	return golibs.SliceByteToString(r), e
 }
