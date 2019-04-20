@@ -237,10 +237,10 @@ func IsGeneralString(s string) bool {
 
 //判断是否标准时间格式
 func IsStandardTime(s string) bool {
-	if len(s) < 1 {
+	if len(s) != 19 {
 		return false
 	}
-	return regexp.MustCompile(`^\d{4}\-\d{2}\-\d{2}\s+\d{2}:\d{2}:\d{2}$`).MatchString(s)
+	return regexp.MustCompile(`^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$`).MatchString(s)
 }
 
 // 是否IPv4地址
