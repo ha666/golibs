@@ -7,7 +7,7 @@
 package grpool
 
 import (
-	"gitee.com/ha666/golibs/gtime"
+	"github.com/ha666/golibs/gtime"
 	"runtime"
 	"sync/atomic"
 	"time"

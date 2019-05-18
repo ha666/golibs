@@ -6,7 +6,7 @@
 
 package grpool
 
-import "gitee.com/ha666/golibs/gtime"
+import "github.com/ha666/golibs/gtime"
 
 // 开始任务
 func (j *PoolJob) start() {

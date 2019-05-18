@@ -8,7 +8,7 @@
 package gmap
 
 import (
-	"gitee.com/ha666/golibs/util/gconv"
+	"github.com/ha666/golibs/util/gconv"
 	"sync"
 )
 

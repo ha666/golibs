@@ -9,7 +9,7 @@
 package grpool
 
 import (
-	"gitee.com/ha666/golibs/container/glist"
+	"github.com/ha666/golibs/container/glist"
 	"math"
 	"runtime"
 	"sync/atomic"

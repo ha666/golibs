@@ -11,7 +11,7 @@ package gconv
 
 import (
 	"fmt"
-	"gitee.com/ha666/golibs"
+	"github.com/ha666/golibs"
 	"strconv"
 )
 
