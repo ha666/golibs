@@ -72,16 +72,16 @@ func Strim(s string) string {
 
 //字符串转成Unicode编码
 func String2Unicode(s string) string {
-	json := ""
+	data := NewStringBuilder()
 	for _, r := range s {
-		rint := int(r)
+		rint := int64(r)
 		if rint < 128 {
-			json += string(r)
+			data.Append("\\u00").Append(strconv.FormatInt(rint, 16))
 		} else {
-			json += "\\u" + strconv.FormatInt(int64(rint), 16)
+			data.Append("\\u").Append(strconv.FormatInt(rint, 16))
 		}
 	}
-	return json
+	return data.ToString()
 }
 
 //Unicode编码转成字符串
