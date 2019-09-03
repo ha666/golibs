@@ -425,7 +425,7 @@ func GetCurrentIntranetIP() string {
 	for _, address := range addrs {
 		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 			if ipnet.IP.To4() != nil {
-				if strings.HasPrefix(ipnet.IP.String(), "10.") || strings.HasPrefix(ipnet.IP.String(), "192.") {
+				if strings.HasPrefix(ipnet.IP.String(), "10.") || strings.HasPrefix(ipnet.IP.String(), "192.") || strings.HasPrefix(ipnet.IP.String(), "172.") {
 					ip_address = ipnet.IP.String()
 					break
 				}
