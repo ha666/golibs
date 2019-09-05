@@ -1,7 +1,9 @@
 package golibs
 
 import (
+	"errors"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -71,4 +73,85 @@ func From2000Nano() int64 {
 // 把时间字符串转成本地时间
 func TimeStringToTime(sourceTime string) (time.Time, error) {
 	return time.ParseInLocation(Time_TIMEStandard, sourceTime, time.Local)
+}
+
+//版本号转时间,格式:2019.905.1052
+func Version2Time(version string) (t time.Time, err error) {
+
+	//region 验证格式
+	if Length(version) < 10 {
+		return t, errors.New("错误的版本")
+	}
+	if !IsVersion(version) {
+		return t, errors.New("错误的版本号")
+	}
+	if !strings.Contains(version, ".") {
+		return t, errors.New("错误的版本号格式")
+	}
+	tmpVer := strings.Split(version, ".")
+	if len(tmpVer) < 3 {
+		return t, errors.New("错误的版本号格式")
+	}
+	//endregion
+
+	//region 解析年份
+	if !IsNumber(tmpVer[0]) {
+		return t, errors.New("错误的版本号格式yyyy")
+	}
+	year, err := strconv.Atoi(tmpVer[0])
+	if err != nil {
+		return t, err
+	}
+	if year < 2018 || year > 2036 {
+		return t, errors.New("错误的年份")
+	}
+	//endregion
+
+	//region 解析月日
+	if !IsNumber(tmpVer[1]) {
+		return t, errors.New("错误的版本号格式MMdd")
+	}
+	monthDay, err := strconv.Atoi(tmpVer[1])
+	if err != nil {
+		return t, err
+	}
+	if monthDay < 101 || monthDay > 1231 {
+		return t, errors.New("错误的月日")
+	}
+	month := monthDay / 100
+	day := monthDay % 100
+	if month < 1 || month > 12 {
+		return t, errors.New("错误的月")
+	}
+	if day < 1 || day > 31 {
+		return t, errors.New("错误的日")
+	}
+	if month == 2 && day > 29 {
+		return t, errors.New("错误的日")
+	}
+	//endregion
+
+	//region 解析时分
+	if !IsNumber(tmpVer[2]) {
+		return t, errors.New("错误的版本号格式HHmm")
+	}
+	hourMinute, err := strconv.Atoi(tmpVer[2])
+	if err != nil {
+		return t, err
+	}
+	if hourMinute < 0 || hourMinute > 2359 {
+		return t, errors.New("错误的时分")
+	}
+	hour := hourMinute / 100
+	minute := hourMinute % 100
+	if hour < 0 || hour > 23 {
+		return t, errors.New("错误的时")
+	}
+	if minute < 0 || minute > 59 {
+		return t, errors.New("错误的分")
+	}
+	//endregion
+
+	return time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.Local), nil
+
 }
