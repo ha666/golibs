@@ -20,6 +20,25 @@ import (
 	"unicode/utf8"
 )
 
+var (
+	GetFileSuffixRegex         = regexp.MustCompile(".(jpg|jpeg|png|gif|exe|doc|docx|ppt|pptx|xls|xlsx)")
+	IsTaobaoNickRegex          = regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“]*$)`)
+	IsSubTaobaoNickRegex       = regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“:]*$)`)
+	IsVersionRegex             = regexp.MustCompile(`(^[0-9.]*$)`)
+	IsUrlRegex                 = regexp.MustCompile(`(^[a-zA-z]+://[^\s]*$)`)
+	IsNumberRegex              = regexp.MustCompile(`(^[0-9]*$)`)
+	IsMultipNumberRegex        = regexp.MustCompile(`(^[0-9,]*$)`)
+	IsLetterOrNumberRegex      = regexp.MustCompile(`(^[A-Za-z0-9_]*$)`)
+	IsLetterOrNumber1Regex     = regexp.MustCompile(`(^[A-Za-z0-9_-]*$)`)
+	IsHanOrLetterOrNumberRegex = regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5-]*$")
+	IsGeneralStringRegex       = regexp.MustCompile("^[A-Za-z0-9_\\-#+./:\u4e00-\u9fa5]*$")
+	IsStandardTimeRegex        = regexp.MustCompile(`^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$`)
+	IsIPAddressRegecx          = regexp.MustCompile(`^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$`)
+	IsIntranetIPRegex          = regexp.MustCompile(`^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$`)
+	IsEmailRegex               = regexp.MustCompile(`^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$`)
+	IsMobileRegex              = regexp.MustCompile("^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][1,3,5,8,9]))[0-9]{8}$")
+)
+
 //使用 utf8.RuneCountInString()统计字符串长度
 func Length(str string) int {
 	return utf8.RuneCountInString(str)
@@ -46,8 +65,7 @@ func ReverseString(s string) string {
 
 //获取文件扩展名
 func GetFileSuffix(s string) string {
-	re, _ := regexp.Compile(".(jpg|jpeg|png|gif|exe|doc|docx|ppt|pptx|xls|xlsx)")
-	suffix := re.ReplaceAllString(s, "")
+	suffix := GetFileSuffixRegex.ReplaceAllString(s, "")
 	return suffix
 }
 
@@ -160,7 +178,7 @@ func IsTaobaoNick(s string) bool {
 	if len(s) < 2 {
 		return false
 	}
-	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“]*$)`).MatchString(s)
+	return IsTaobaoNickRegex.MatchString(s)
 }
 
 //判断是否是淘宝用户名（子帐号）
@@ -168,7 +186,7 @@ func IsSubTaobaoNick(s string) bool {
 	if len(s) < 2 {
 		return false
 	}
-	return regexp.MustCompile(`(^[\\u4e00-\\u9fa5\\w_—\\-，。…·〔〕（）！@￥%……&*？、；‘“:]*$)`).MatchString(s)
+	return IsSubTaobaoNickRegex.MatchString(s)
 }
 
 //判断是否版本号
@@ -176,7 +194,7 @@ func IsVersion(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[0-9.]*$)`).MatchString(s)
+	return IsVersionRegex.MatchString(s)
 }
 
 //判断是否网址
@@ -184,7 +202,7 @@ func IsUrl(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[a-zA-z]+://[^\s]*$)`).MatchString(s)
+	return IsUrlRegex.MatchString(s)
 }
 
 //是否数字
@@ -192,7 +210,7 @@ func IsNumber(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[0-9]*$)`).MatchString(s)
+	return IsNumberRegex.MatchString(s)
 }
 
 //是否多数字(用逗号间隔)
@@ -200,7 +218,7 @@ func IsMultipNumber(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[0-9,]*$)`).MatchString(s)
+	return IsMultipNumberRegex.MatchString(s)
 }
 
 //判断是否由字母、数字、下划线组成
@@ -208,7 +226,7 @@ func IsLetterOrNumber(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[A-Za-z0-9_]*$)`).MatchString(s)
+	return IsLetterOrNumberRegex.MatchString(s)
 }
 
 //判断是否由字母、数字、下划线组成
@@ -216,7 +234,7 @@ func IsLetterOrNumber1(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`(^[A-Za-z0-9_-]*$)`).MatchString(s)
+	return IsLetterOrNumber1Regex.MatchString(s)
 }
 
 //判断是否由汉字、字母、数字、下划线组成
@@ -224,7 +242,7 @@ func IsHanOrLetterOrNumber(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile("^[A-Za-z0-9_\u4e00-\u9fa5-]*$").MatchString(s)
+	return IsHanOrLetterOrNumberRegex.MatchString(s)
 }
 
 //判断是否由汉字、字母、数字、下划线、中杠等组成
@@ -232,7 +250,7 @@ func IsGeneralString(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile("^[A-Za-z0-9_\\-#+./:\u4e00-\u9fa5]*$").MatchString(s)
+	return IsGeneralStringRegex.MatchString(s)
 }
 
 //判断是否标准时间格式
@@ -240,25 +258,23 @@ func IsStandardTime(s string) bool {
 	if len(s) != 19 {
 		return false
 	}
-	return regexp.MustCompile(`^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$`).MatchString(s)
+	return IsStandardTimeRegex.MatchString(s)
 }
 
 // 是否IPv4地址
-func IsIPAddress(ip string) bool {
-	matched, err := regexp.MatchString("(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)", ip)
-	if err != nil {
+func IsIPAddress(s string) bool {
+	if len(s) < 7 {
 		return false
 	}
-	return matched
+	return IsIPAddressRegecx.MatchString(s)
 }
 
 // 是否内网IP地址
 func IsIntranetIP(s string) bool {
-	matched, err := regexp.MatchString(`^((192\.168|172\.([1][6-9]|[2]\d|3[01]))(\.([2][0-4]\d|[2][5][0-5]|[01]?\d?\d)){2}|10(\.([2][0-4]\d|[2][5][0-5]|[01]?\d?\d)){3})$`, s)
-	if err != nil {
+	if len(s) < 7 {
 		return false
 	}
-	return matched
+	return IsIntranetIPRegex.MatchString(s)
 }
 
 //是否email
@@ -266,7 +282,7 @@ func IsEmail(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile(`^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$`).MatchString(s)
+	return IsEmailRegex.MatchString(s)
 }
 
 //是否手机号
@@ -274,7 +290,7 @@ func IsMobile(s string) bool {
 	if len(s) < 1 {
 		return false
 	}
-	return regexp.MustCompile("^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][1,3,5,8,9]))[0-9]{8}$").MatchString(s)
+	return IsMobileRegex.MatchString(s)
 }
 
 /*
