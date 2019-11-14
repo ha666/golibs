@@ -27,6 +27,7 @@ var (
 	IsVersionRegex             = regexp.MustCompile(`(^[0-9.]*$)`)
 	IsUrlRegex                 = regexp.MustCompile(`(^[a-zA-z]+://[^\s]*$)`)
 	IsNumberRegex              = regexp.MustCompile(`(^[0-9]*$)`)
+	IsAsciiRegex               = regexp.MustCompile(`(^[\x00-\xff]*$)`)
 	IsMultipNumberRegex        = regexp.MustCompile(`(^[0-9,]*$)`)
 	IsLetterOrNumberRegex      = regexp.MustCompile(`(^[A-Za-z0-9_]*$)`)
 	IsLetterOrNumber1Regex     = regexp.MustCompile(`(^[A-Za-z0-9_-]*$)`)
@@ -211,6 +212,14 @@ func IsNumber(s string) bool {
 		return false
 	}
 	return IsNumberRegex.MatchString(s)
+}
+
+//是否Ascii字符
+func IsAscii(s string) bool {
+	if len(s) < 1 {
+		return false
+	}
+	return IsAsciiRegex.MatchString(s)
 }
 
 //是否多数字(用逗号间隔)
