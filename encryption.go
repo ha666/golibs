@@ -14,6 +14,8 @@ import (
 	"encoding/hex"
 	"errors"
 	"net/url"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Md5(s string) string {
@@ -127,4 +129,20 @@ func PKCS7Unpadding(origData []byte) []byte {
 	length := len(origData)
 	unpadding := int(origData[length-1])
 	return origData[:(length - unpadding)]
+}
+
+func BcryptEncrypt(message []byte) ([]byte, error) {
+	hash, err := bcrypt.GenerateFromPassword(message, bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	return hash, nil
+}
+
+func CheckBcrypt(hashBytes, s []byte) (bool, error) {
+	if err := bcrypt.CompareHashAndPassword(hashBytes, s); err != nil {
+		return false, err
+	} else {
+		return true, nil
+	}
 }
