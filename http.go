@@ -306,7 +306,7 @@ func GetCurrentDirectory() string {
 }
 
 //解析请求参数到一个url.Values对象
-func ParseRequest(req string) (params url.Values, err error) {
+func ParseRequestQuery(req string) (params url.Values, err error) {
 	if Length(req) <= 0 {
 		err = errors.New("没有找到参数")
 		return
@@ -318,6 +318,9 @@ func ParseRequest(req string) (params url.Values, err error) {
 	}
 	params = url.Values{}
 	for i, v := range tmp {
+		if v == "" {
+			continue
+		}
 		start := strings.Index(v, "=")
 		if start < 0 {
 			err = errors.New(fmt.Sprintf("没有找到参数名,第%d个", i))
@@ -326,11 +329,10 @@ func ParseRequest(req string) (params url.Values, err error) {
 		key := SubString(v, 0, start)
 		val := SubString(v, start+1, len(v)-start-1)
 		if strings.Contains(val, "%") {
-			val64, err := UnBase64(val)
+			val, err = url.QueryUnescape(val)
 			if err != nil {
 				return nil, errors.New(fmt.Sprintf("解析参数%s的值出错:%s", key, err.Error()))
 			}
-			val = SliceByteToString(val64)
 		}
 		params.Add(key, val)
 	}
