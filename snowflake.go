@@ -136,6 +136,10 @@ func (n *Node) Generate() ID {
 	return r
 }
 
+func (n *Node) GetTime(i int64) time.Time {
+	return time.Unix(((i>>timeShift)+Epoch)/1000, 0)
+}
+
 // Int64 returns an int64 of the snowflake ID
 func (f ID) Int64() int64 {
 	return int64(f)
