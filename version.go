@@ -1,3 +1,3 @@
 package golibs
 
-const VERSION = "2020.605.1840"
+const VERSION = "2020.712.900"
