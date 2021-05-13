@@ -9,14 +9,15 @@ import (
 
 const (
 	Time_TIMEyyyyMMdd           string = "20060102"
+	Time_TIMEyyyy_MM_dd         string = "2006-01-02"
 	Time_TIMEStandard           string = "2006-01-02 15:04:05"
 	Time_TIME_HH_mm_ss          string = "15:04:05"
-	Time_TIMEMSSQL              string = "2006-01-02T15:04:05.999Z"
+	Time_TIMEMSSQL              string = "2006-01-02T15:04:05.000Z"
 	Time_TIMEMYSQL              string = "2006-01-02T15:04:05+08:00"
 	Time_TIMEyyyyMMddHHmmss     string = "20060102150405"
 	Time_TIMEyyyyMMddHHmmssffff string = "200601021504059999"
 	Time_TIMEJavaUtilDate       string = "20060102150405000-0700"
-	Time_TIMEISO8601            string = "2006-01-02T15:04:05.999-0700"
+	Time_TIMEISO8601            string = "2006-01-02T15:04:05.000-0700"
 )
 
 // 获取当前日期
@@ -87,6 +88,9 @@ func Version2Time(version string) (t time.Time, err error) {
 	}
 	if !strings.Contains(version, ".") {
 		return t, errors.New("错误的版本号格式")
+	}
+	if strings.HasPrefix(version, "v") {
+		version = version[1:]
 	}
 	tmpVer := strings.Split(version, ".")
 	if len(tmpVer) < 3 {
