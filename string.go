@@ -3,11 +3,13 @@ package golibs
 import (
 	"bytes"
 	"crypto/rand"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"math/big"
 	math_rand "math/rand"
@@ -132,6 +134,11 @@ func GetGuid() string {
 		return ""
 	}
 	return Md5(Base64(b))
+}
+
+//获取一个唯一id
+func GenUniqueId() string {
+	return base64.URLEncoding.EncodeToString(HexStringToBytes(uuid.New().String()))
 }
 
 //把IP地址转成数字
