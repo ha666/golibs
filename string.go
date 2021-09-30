@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"io"
 	"math/big"
 	math_rand "math/rand"
@@ -20,6 +19,8 @@ import (
 	"time"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -139,6 +140,14 @@ func GetGuid() string {
 //获取一个唯一id
 func GenUniqueId() string {
 	return base64.URLEncoding.EncodeToString(HexStringToBytes(uuid.New().String()))
+}
+
+func GenUUID36() string {
+	return uuid.New().String()
+}
+
+func GenUUID32() string {
+	return strings.ReplaceAll(uuid.New().String(), "-", "")
 }
 
 //把IP地址转成数字
