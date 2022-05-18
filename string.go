@@ -40,7 +40,7 @@ var (
 	IsIPAddressRegecx          = regexp.MustCompile(`^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$`)
 	IsIntranetIPRegex          = regexp.MustCompile(`^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$`)
 	IsEmailRegex               = regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`)
-	IsMobileRegex              = regexp.MustCompile("^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][1,3,5,8,9]))[0-9]{8}$")
+	IsMobileRegex              = regexp.MustCompile(`^1[3456789]\d{9}$`)
 )
 
 //使用 utf8.RuneCountInString()统计字符串长度
