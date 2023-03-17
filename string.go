@@ -555,3 +555,16 @@ func GetPwd(lenth int) string {
 	}
 	return pwd.ToString()
 }
+
+// RemoveDuplicateStrings 字符串切片去重
+func RemoveDuplicateStrings(strs []string) []string {
+	var result []string
+	strMap := make(map[string]bool)
+	for _, str := range strs {
+		if !strMap[str] {
+			strMap[str] = true
+			result = append(result, str)
+		}
+	}
+	return result
+}
